@@ -1,0 +1,33 @@
+= Docker Image for Antora 
+:uri-antora: https://antora.org
+:uri-asciidoctor: https://asciidoctor.org
+:uri-license: https://www.mozilla.org/en-US/MPL/2.0/
+
+This repository hosts the Docker image for Antora.
+
+== What is Antora?
+
+{uri-antora}[Antora] is a modular static site generator designed for creating documentation sites from AsciiDoc documents.
+Its site generator pipeline aggregates documents from versioned content repositories and processes them using {uri-asciidoctor}[Asciidoctor].
+
+== How to Use this Image
+
+=== Run Directly
+
+You can run this image directly using the `docker run` command:
+
+#TODO# show `docker run` command
+
+=== Use as a Base Image
+
+You can use this image as a base for your own image.
+Create a `Dockerfile` file and add the following line at the top:
+
+#TODO# show the `FROM` command in a sample Dockerfile
+
+== Copyright and License
+
+Copyright (C) 2018 OpenDevise Inc. and the Antora Project.
+
+Use of this software is granted under the terms of the {uri-license}[Mozilla Public License Version 2.0] (MPL-2.0).
+See link:LICENSE[] to find the full license text.
