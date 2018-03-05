@@ -14,16 +14,35 @@ Its site generator pipeline aggregates documents from versioned content reposito
 
 === Run Directly
 
+Assuming you have repository containing `Antora` playbook cloned to some folder and `cd` into that folder.
+
+As an example https://gitlab.com/antora/demo/demo-site[demo-site] will be used.
+
+  $ git clone https://gitlab.com/antora/demo/demo-site.git
+  $ cd demo-site
+
 You can run this image directly using the `docker run` command:
 
-#TODO# show `docker run` command
+  $ docker run -v `pwd`:/antora antora --stacktrace generate site.yml
 
 === Use as a Base Image
 
 You can use this image as a base for your own image.
-Create a `Dockerfile` file and add the following line at the top:
 
-#TODO# show the `FROM` command in a sample Dockerfile
+. Create a `Dockerfile` file and add the following line at the top::
++
+[source]
+.Dockerfile.custom
+----
+FROM antora
+
+RUN yarn global add asciidoctor-plantuml <1>
+----
+<1> add custom `Asciidoctor.js` extension to base image
+
+. Then build
++
+  $ docker build -t antora:custom -f Dockerile.custom .
 
 == Copyright and License
 
