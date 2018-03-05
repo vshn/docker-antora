@@ -3,46 +3,79 @@
 :uri-asciidoctor: https://asciidoctor.org
 :uri-license: https://www.mozilla.org/en-US/MPL/2.0/
 
-This repository hosts the Docker image for Antora.
+This repository hosts the official Docker image for Antora.
 
 == What is Antora?
 
 {uri-antora}[Antora] is a modular static site generator designed for creating documentation sites from AsciiDoc documents.
 Its site generator pipeline aggregates documents from versioned content repositories and processes them using {uri-asciidoctor}[Asciidoctor].
 
+[#use-image]
 == How to Use this Image
 
-=== Run Directly
+*Please note!*
+This image is not yet published to Docker Hub.
+Until the image is published there, you'll need to <<build-image,build it>> locally.
 
-Assuming you have repository containing `Antora` playbook cloned to some folder and `cd` into that folder.
+[#run-image]
+=== Run the Image Directly
 
-As an example https://gitlab.com/antora/demo/demo-site[demo-site] will be used.
+This image is intended to be used as a command in a box.
+You can use this image as a replacement for the `antora` command to execute a playbook.
+The benefit is that you don't actually to install Antora itself.
 
-  $ git clone https://gitlab.com/antora/demo/demo-site.git
-  $ cd demo-site
+To demonstrate how to use this image, we'll be using the https://gitlab.com/antora/demo/demo-site[Antora demo site].
+Start by cloning the the playbook repository for the demo site and switching to the cloned folder:
 
-You can run this image directly using the `docker run` command:
+ $ git clone https://gitlab.com/antora/demo/demo-site.git
+   cd demo-site
 
-  $ docker run -v `pwd`:/antora antora --stacktrace generate site.yml
+Next, run the `docker run` command to run this image directly, which in turn runs the `antora` command:
 
+ $ docker run -v `pwd`:/antora --rm antora/antora --stacktrace site.yml
+
+If you're running a Linux distribution like Fedora that has SELinux enabled, you'll need to add the `--privileged` flag in order to use the volume mount:
+
+ $ docker run --privileged -v `pwd`:/antora --rm antora/antora --stacktrace site.yml
+
+If you want to shell into the container, set the `--entrypoint` option as follows:
+
+ $ docker run --entrypoint ash --privileged -v `pwd`:/antora --rm -it antora/antora
+
+You can then use the `antora` command inside the running container.
+
+[#extend-image]
 === Use as a Base Image
 
 You can use this image as a base for your own image.
 
-. Create a `Dockerfile` file and add the following line at the top::
+. Create a custom Dockerfile file named [.path]_Dockerfile.custom_
+. Populate that file with the following contents:
 +
-[source]
 .Dockerfile.custom
+[source,docker]
 ----
-FROM antora
+FROM antora/antora
 
 RUN yarn global add asciidoctor-plantuml <1>
 ----
-<1> add custom `Asciidoctor.js` extension to base image
+<1> Adds a custom extension to the base image.
 
-. Then build
-+
-  $ docker build -t antora:custom -f Dockerile.custom .
+. Build the image using the following command:
+
+  $ docker build -t local/antora:custom -f Dockerile.custom .
+
+The build may take awhile to complete.
+Once it's finished, you can use the image name `local/antora:custom` to run the container.
+
+[#build-image]
+== How to Build this Image
+
+To build this image locally, use the following command:
+
+ $ docker build -t local/antora .
+
+You can then use the image name `local/antora` (i.e., `local/antora:latest`) to run the container.
 
 == Copyright and License
 
