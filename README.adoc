@@ -63,7 +63,7 @@ RUN yarn global add asciidoctor-plantuml <1>
 
 . Build the image using the following command:
 
-  $ docker build -t local/antora:custom -f Dockerile.custom .
+  $ docker build -t local/antora:custom -f Dockerfile.custom .
 
 The build may take awhile to complete.
 Once it's finished, you can use the image name `local/antora:custom` to run the container.
