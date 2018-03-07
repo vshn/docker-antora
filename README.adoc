@@ -13,9 +13,10 @@ Its site generator pipeline aggregates documents from versioned content reposito
 [#use-image]
 == How to Use this Image
 
-*Please note!*
-This image is not yet published to Docker Hub.
-Until the image is published there, you'll need to <<build-image,build it>> locally.
+This image is published to Docker Hub.
+The name of the image is `antora/antora`.
+
+If you're helping to improve this image, you should learn how to <<build-image,build it locally>>.
 
 [#run-image]
 === Run the Image Directly
