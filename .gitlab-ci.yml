@@ -4,9 +4,13 @@ build:
   services:
   - docker:dind
   before_script:
+  - apk --no-cache -q add curl jq
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
+  - export ANTORA_VERSION=$(curl -s https://gitlab.com/api/v4/projects/4180516/repository/tags | jq -r '.[0].name[1:]')
   - docker build --pull -t "$CI_REGISTRY_IMAGE" .
   - docker push "$CI_REGISTRY_IMAGE"
+  - docker tag "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
+  - docker push "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
   only:
   - master@antora/docker-antora
