@@ -14,5 +14,4 @@ RUN apk --no-cache add --virtual .build-deps g++ libressl-dev make python curl-d
 
 WORKDIR /antora
 
-ENTRYPOINT ["antora"]
-CMD ["--help"]
+ENTRYPOINT [ "antora" ]
