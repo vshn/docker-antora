@@ -76,6 +76,35 @@ To see a list of your images, run the following command:
 
  $ docker images
 
+[#ci-image]
+=== Run in gitlab-ci
+
+Since the default entry point of the image is the command `antora` itself, you will have to define another entry point to use it as your base image in your `gitlab-ci.yml` file as this :
+
+[source,yaml]
+----
+image: 
+  name: antora/antora:1.0.0
+  entrypoint: [/bin/sh, -c]
+----
+
+If you don't do so, you will obtain this error message :
+
+[source,bash]
+----
+error: unknown option `-c'
+----
+
+just after the `Skipping Git submodules setup` line.
+
+After this change, you will be able to use the command `antora` inside your gitlab CI :
+
+[source,yaml] 
+----
+  script:
+  - antora site.yml
+----
+
 [#build-image]
 == How to Build this Image
 
