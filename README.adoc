@@ -15,8 +15,9 @@ Its site generator pipeline aggregates documents from versioned content reposito
 
 This image is published to Docker Hub.
 The name of the image is `antora/antora`.
+The purpose of the image is to execute the `antora` command.
 
-If you're helping to improve this image, you should learn how to <<build-image,build it locally>>.
+If you want to help improve this image, you should learn how to <<build-image,build and install it locally>>.
 
 [#run-image]
 === Run the Image Directly
@@ -26,24 +27,27 @@ You can use this image as a replacement for the `antora` command to execute a pl
 The benefit is that you don't actually to install Antora itself.
 
 To demonstrate how to use this image, we'll be using the https://gitlab.com/antora/demo/demo-site[Antora demo site].
-Start by cloning the the playbook repository for the demo site and switching to the cloned folder:
+Start by cloning the playbook repository for the demo site, then switch to the newly created folder:
 
  $ git clone https://gitlab.com/antora/demo/demo-site.git
    cd demo-site
 
-Next, run the `docker run` command to run this image directly, which in turn runs the `antora` command:
+Next, run the `docker run` command to run this image directly, which implicitly runs the `antora` command inside the container:
 
- $ docker run -v `pwd`:/antora --rm antora/antora --stacktrace site.yml
+ $ docker run -v `pwd`:/antora --rm -t antora/antora --stacktrace site.yml
 
-If you're running a Linux distribution like Fedora that has SELinux enabled, you'll need to add the `--privileged` flag in order to use the volume mount:
+The `-t` flag allocates a pseudo-TTY, which is required if you want to see the progress bars for git operations.
 
- $ docker run --privileged -v `pwd`:/antora --rm antora/antora --stacktrace site.yml
+If you're running a Linux distribution like Fedora that has SELinux enabled, you'll need to add the `--privileged` flag in order to use the volume mount.
+You'll also want to add the `-u $UID` option to instruct Docker to run the entrypoint command as the current user (otherwise, files will be written as root and thus hard to delete).
+
+ $ docker run -u $UID --privileged -v `pwd`:/antora --rm -t antora/antora --stacktrace site.yml
 
 If you want to shell into the container, set the `--entrypoint` option as follows:
 
  $ docker run --entrypoint ash --privileged -v `pwd`:/antora --rm -it antora/antora
 
-You can then use the `antora` command inside the running container.
+This command allows you to use the `antora` command inside the running container (but still generate files to the local filesystem).
 
 [#extend-image]
 === Use as a Base Image
