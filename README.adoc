@@ -39,9 +39,22 @@ Next, run the `docker run` command to run this image directly, which implicitly 
 The `-t` flag allocates a pseudo-TTY, which is required if you want to see the progress bars for git operations.
 
 If you're running a Linux distribution like Fedora that has SELinux enabled, you'll need to add the `--privileged` flag in order to use the volume mount.
-You'll also want to add the `-u $UID` option to instruct Docker to run the entrypoint command as the current user (otherwise, files will be written as root and thus hard to delete).
+You'll also want to add the `-u $(id -u):$(id -g)` option to instruct Docker to run the entrypoint command as the current user (otherwise, files will be written as root and thus hard to delete).
 
- $ docker run -u $UID --privileged -v `pwd`:/antora --rm -t antora/antora --stacktrace site.yml
+ $ docker run -u $(id -u):$(id -g) --privileged -v `pwd`:/antora --rm -t antora/antora --stacktrace site.yml
+
+[WARNING]
+====
+If your uid is not 1000, you may encounter the following error:
+
+ error: EACCES: permission denied, mkdir '/.cache'
+
+This happens because the default cache dir resolves relative to the home directory and the home directory of the Docker user is resolving to `/` (hence [.path]_/.cache_).
+
+You can fix this problem by setting the cache dir explicitly when running Antora:
+
+ $ docker run -u $(id -u):$(id -g) --privileged -v `pwd`:/antora --rm -t antora/antora --stacktrace --cache-dir=./.cache site.yml
+====
 
 If you want to shell into the container, set the `--entrypoint` option as follows:
 
