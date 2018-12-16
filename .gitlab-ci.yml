@@ -9,8 +9,14 @@ build:
   - apk --no-cache -q add curl jq
   - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   script:
-  - export ANTORA_VERSION=$(curl -s https://gitlab.com/api/v4/projects/4180516/repository/tags | jq -r 'first(.[].name[1:] | select(contains("-") | not))')
   - docker build --pull -t "$CI_REGISTRY_IMAGE" .
-  - docker tag "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
-  - docker push "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
-  - docker push "$CI_REGISTRY_IMAGE:latest"
+  - CI_REGISTRY_IMAGE_VERSION=$(curl -s https://registry.hub.docker.com/v2/repositories/antora/antora/tags/ | jq -r 'first(.results[].name | select(. != "latest"))')
+  - ANTORA_VERSION=$(curl -s https://gitlab.com/api/v4/projects/4180516/repository/tags | jq -r 'first(.[].name[1:] | select(contains("-") | not))')
+  - |
+    if [ "$CI_REGISTRY_IMAGE_VERSION" == "$ANTORA_VERSION" ]; then
+      echo "Skipping publishing. $CI_REGISTRY_IMAGE:$ANTORA_VERSION has already been published."
+    else
+      docker tag "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
+      docker push "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
+      docker push "$CI_REGISTRY_IMAGE:latest"
+    fi
