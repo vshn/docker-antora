@@ -15,8 +15,8 @@ build:
   - |
     if [ "$CI_REGISTRY_IMAGE_VERSION" == "$ANTORA_VERSION" ]; then
       echo "Skipping publishing. $CI_REGISTRY_IMAGE:$ANTORA_VERSION has already been published."
-    else
-      docker tag "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
-      docker push "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
-      docker push "$CI_REGISTRY_IMAGE:latest"
+      exit 0
     fi
+  - docker tag "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
+  - docker push "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
+  - docker push "$CI_REGISTRY_IMAGE:latest"
