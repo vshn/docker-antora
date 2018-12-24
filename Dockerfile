@@ -8,7 +8,8 @@ RUN yarn global add --ignore-optional --silent @antora/cli@latest @antora/site-g
     && find $(yarn global dir)/node_modules/isomorphic-git/dist/* -maxdepth 0 -not -name for-node -exec rm -rf {} \; \
     && rm -rf $(yarn global dir)/node_modules/moment/min \
     && rm -rf $(yarn global dir)/node_modules/moment/src \
-    && apk --no-cache add curl jq
+    && apk --no-cache add curl jq \
+    && rm -rf /tmp/*
 
 WORKDIR /antora
 
