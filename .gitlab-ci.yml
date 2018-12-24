@@ -25,7 +25,7 @@ deploy:
   only:
   - master@antora/docker-antora
   script:
-  - echo ANTORA_VERSION=$ANTORA_VERSION
+  - echo "Antora version requested: ${ANTORA_VERSION:-none}"
   - *get_antora_version
   - *sub_antora_version
   - *docker_build
