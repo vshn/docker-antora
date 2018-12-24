@@ -31,11 +31,11 @@ deploy:
   - *sub_antora_version
   - *docker_build
   - CI_REGISTRY_IMAGE_VERSION=$(curl -s https://registry.hub.docker.com/v2/repositories/antora/antora/tags/ | jq -rM '.results[].name | select(. == "'$ANTORA_VERSION'")')
-  #- |
-  #  if [ ! -z $CI_REGISTRY_IMAGE_VERSION ]; then
-  #    echo "Skipping publishing. $CI_REGISTRY_IMAGE:$ANTORA_VERSION has already been published."
-  #    exit 0
-  #  fi
+  - |
+    if [ ! -z $CI_REGISTRY_IMAGE_VERSION ]; then
+      echo "Skipping publishing. $CI_REGISTRY_IMAGE:$ANTORA_VERSION has already been published."
+      exit 0
+    fi
   - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   - echo "Publishing $CI_REGISTRY_IMAGE:$ANTORA_VERSION"
   - docker push "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
