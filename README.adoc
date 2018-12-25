@@ -10,6 +10,14 @@ This repository hosts the official Docker image for Antora.
 {uri-antora}[Antora] is a modular static site generator designed for creating documentation sites from AsciiDoc documents.
 Its site generator pipeline aggregates documents from versioned content repositories and processes them using {uri-asciidoctor}[Asciidoctor].
 
+== Versioning Policy
+
+The version policy this image follows is that there's exactly one version of the image for each released version of Antora.
+
+The greatest stable release is also published under the Docker tag "latest".
+The greatest prerelease is also published under the Docker tag "testing".
+These tags correspond to the tags applied to the packages in the npm repository.
+
 [#use-image]
 == How to Use this Image
 
