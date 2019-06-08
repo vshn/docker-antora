@@ -15,4 +15,7 @@ RUN yarn global add --ignore-optional --silent @antora/cli@latest @antora/site-g
 
 WORKDIR /antora
 
-ENTRYPOINT [ "antora" ]
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD ["antora"]
