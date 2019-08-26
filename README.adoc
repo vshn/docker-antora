@@ -1,4 +1,4 @@
-= Docker Image for Antora 
+= Docker Image for Antora
 :uri-antora: https://antora.org
 :uri-asciidoctor: https://asciidoctor.org
 :uri-license: https://www.mozilla.org/en-US/MPL/2.0/
@@ -32,7 +32,8 @@ If you want to help improve this image, you should learn how to <<build-image,bu
 
 This image is intended to be used as a command in a box.
 You can use this image as a replacement for the `antora` command to execute a playbook.
-The benefit is that you don't actually to install Antora itself.
+(The arguments that follow the name of the image are assumed to either be arguments to the `antora` command or a local command).
+The benefit is that you don't have to install Antora itself.
 
 To demonstrate how to use this image, we'll be using the https://gitlab.com/antora/demo/demo-site[Antora demo site].
 Start by cloning the playbook repository for the demo site, then switch to the newly created folder:
@@ -65,40 +66,33 @@ You can fix this problem by setting the cache dir explicitly when running Antora
    antora/antora --stacktrace --cache-dir=./.cache site.yml
 ====
 
-If you want to shell into the container, set the `--entrypoint` option as follows:
+If you want to shell into the container, use the following command:
 
- $ docker run --entrypoint ash --privileged -v `pwd`:/antora --rm -it antora/antora
+ $ docker run --privileged -v `pwd`:/antora --rm -it antora/antora sh
 
-This command allows you to use the `antora` command inside the running container (but still generate files to the local filesystem).
+This command allows you to run the `antora` command from a prompt inside the running container (but will generate files to the local filesystem).
+
+In fact, if the first argument following the image name is a local command, the container will execute that command instead of `antora`.
 
 [#gitlab-ci-image]
 === Use the image in GitLab CI
 
-If you attempt to use this image as the base image in GitLab CI, you'll likely encounter the following error message (just after the `Skipping Git submodules setup` line in the log):
-
- error: unknown option `-c'
-
-This happens because this image defines the `antora` command as the default entrypoint rather than a shell command.
-In order to use this image as the base image in GitLab CI, you'll need to override the entrypoint to be a shell command as GitLab CI expects.
-
-To override the entrypoint in a way that's compatible with GitLab CI, define the image in `.gitlab-ci.yml` as follows:
+Thanks to the custom entrypoint script ([.path]_docker-entrypoint.sh_), this image will work on GitLab CI without having to specify the entrypoint.
+Simply reference the image name at the top of the [.path]_.gitlab-ci.yml_ file, as shown here:
 
 [source,yaml]
 ----
-image: 
+image:
   name: antora/antora
-  entrypoint: [/bin/sh, -c]
 ----
 
-Now you'll be able to invoke the `antora` command from a script clause in `.gitlab-ci.yml` as follows:
+By using this image, you can invoke the `antora` command from a script clause in [.path]_.gitlab-ci.yml_ as follows:
 
-[source,yaml] 
+[source,yaml]
 ----
   script:
   - antora site.yml
 ----
-
-This is similar to how we shelled into the container by passing the `--entrypoint` option in the previous section.
 
 [#extend-image]
 === Use as a Base Image
