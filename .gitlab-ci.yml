@@ -1,6 +1,6 @@
-image: docker:18.09
+image: docker:19.03
 services:
-- docker:18.09-dind
+- docker:19.03-dind
 before_script:
 - apk --no-cache -q add curl jq
 variables:
@@ -12,6 +12,8 @@ variables:
   sed -i "s/@latest/@$ANTORA_VERSION/g" Dockerfile
 - &docker_build
   docker build --pull -t "$CI_REGISTRY_IMAGE:$ANTORA_VERSION" .
+- &docker_list_image
+  docker images "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
 build:
   stage: build
   except:
@@ -20,6 +22,7 @@ build:
   - *get_antora_version
   - *sub_antora_version
   - *docker_build
+  - *docker_list_image
 deploy:
   stage: deploy
   only:
@@ -30,6 +33,7 @@ deploy:
   - *get_antora_version
   - *sub_antora_version
   - *docker_build
+  - *docker_list_image
   - CI_REGISTRY_IMAGE_VERSION=$(curl -s https://registry.hub.docker.com/v2/repositories/antora/antora/tags/ | jq -rM '.results[].name | select(. == "'$ANTORA_VERSION'")')
   - |
     if [ ! -z $CI_REGISTRY_IMAGE_VERSION ]; then
