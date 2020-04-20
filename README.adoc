@@ -43,14 +43,19 @@ Start by cloning the playbook repository for the demo site, then switch to the n
 
 Next, run the `docker run` command to run this image directly, which implicitly runs the `antora` command inside the container:
 
- $ docker run -v `pwd`:/antora --rm -t antora/antora --stacktrace site.yml
+ $ docker run -v $PWD:/antora --rm -t antora/antora --stacktrace site.yml
 
 The `-t` flag allocates a pseudo-TTY, which is required if you want to see the progress bars for git operations.
 
-If you're running a Linux distribution like Fedora that has SELinux enabled, you'll need to add the `--privileged` flag in order to use the volume mount.
-You'll also want to add the `-u $(id -u):$(id -g)` option to instruct Docker to run the entrypoint command as the current user (otherwise, files will be written as root and thus hard to delete).
+If you're running a Linux distribution that has SELinux enabled, like Fedora, you'll need to add the `:Z` (or `:z`) modifier to the volume mount.
+You'll also want to add the `-u $(id -u)` option to instruct Docker to run the entrypoint command as the current user.
+Otherwise, files will be written as root and thus hard to delete.
+Here's the command you'll use:
 
- $ docker run -u $(id -u):$(id -g) --privileged -v `pwd`:/antora --rm -t antora/antora --stacktrace site.yml
+ $ docker run -u $(id -u) -v $PWD:/antora:Z --rm -t antora/antora --stacktrace site.yml
+ 
+Although tempting, the `--privileged` flag is not needed.
+To learn more about using volume mounts with SELinux, see the blog post http://www.projectatomic.io/blog/2015/06/using-volumes-with-docker-can-cause-problems-with-selinux/[Using Volumes with Docker can Cause Problems with SELinux].
 
 [WARNING]
 ====
@@ -58,21 +63,20 @@ If your uid is not 1000, you may encounter the following error:
 
  error: EACCES: permission denied, mkdir '/.cache'
 
-This happens because the default cache dir resolves relative to the home directory and the home directory of the Docker user is resolving to `/` (hence [.path]_/.cache_).
+This happens because the default cache dir resolves relative to the user's home directory and the home directory of the Docker user is `/` (hence the path [.path]_/.cache_).
 
-You can fix this problem by setting the cache dir explicitly when running Antora:
+You can fix this problem by setting the cache dir relative to the playbook when running Antora:
 
- $ docker run -u $(id -u):$(id -g) --privileged -v `pwd`:/antora --rm -t \
-   antora/antora --stacktrace --cache-dir=./.cache site.yml
+ $ docker run -u $(id -u) -v $PWD:/antora:Z --rm -t \
+   antora/antora --cache-dir=./.cache --stacktrace site.yml
 ====
 
 If you want to shell into the container, use the following command:
 
- $ docker run --privileged -v `pwd`:/antora --rm -it antora/antora sh
+ $ docker run -v $PWD:/antora:Z --rm -it antora/antora sh
 
-This command allows you to run the `antora` command from a prompt inside the running container (but will generate files to the local filesystem).
-
-In fact, if the first argument following the image name is a local command, the container will execute that command instead of `antora`.
+This command allows you to run the `antora` command from a prompt inside the running container, but will still generate files to the local filesystem.
+The reason this works is because, if the first argument following the image name is a local command, the container will execute the specified command instead of `antora`.
 
 [#gitlab-ci-image]
 === Use the image in GitLab CI
