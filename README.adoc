@@ -49,13 +49,13 @@ Start by cloning the playbook repository for the demo site, then switch to the n
 
 Next, execute the `docker run` command to start a container process from this image, which implicitly runs the `antora` command inside the container:
 
- $ docker run -v $PWD:/antora --rm -t antora/antora --stacktrace site.yml
+ $ docker run -v $PWD:/antora --rm -t antora/antora --stacktrace antora-playbook.yml
 
 The `-t` flag allocates a pseudo-TTY, which is required if you want to see the progress bars for git operations.
 
 Alternately, you can execute the `podman run` command:
 
- $ podman run -v $PWD:/antora --rm -t antora/antora --stacktrace site.yml
+ $ podman run -v $PWD:/antora --rm -t antora/antora --stacktrace antora-playbook.yml
 
 The advantage of podman is that it is more secure.
 It runs in user space and does not rely on a daemon.
@@ -65,11 +65,11 @@ You'll also want to add the `-u $(id -u)` option to instruct Docker to run the e
 Otherwise, files will be written as root and thus hard to delete.
 Here's the command you'll use:
 
- $ docker run -u $(id -u) -v $PWD:/antora:Z --rm -t antora/antora --stacktrace site.yml
+ $ docker run -u $(id -u) -v $PWD:/antora:Z --rm -t antora/antora --stacktrace antora-playbook.yml
 
 When using podman, the `-u` flag is not required since the container is already run in user space.
 
- $ podman run -v $PWD:/antora:Z --rm -t antora/antora --stacktrace site.yml
+ $ podman run -v $PWD:/antora:Z --rm -t antora/antora --stacktrace antora-playbook.yml
  
 Although tempting, the `--privileged` flag is not needed.
 To learn more about using volume mounts with SELinux, see the blog post http://www.projectatomic.io/blog/2015/06/using-volumes-with-docker-can-cause-problems-with-selinux/[Using Volumes with Docker can Cause Problems with SELinux].
@@ -85,7 +85,7 @@ This happens because the default cache dir resolves relative to the user's home 
 You can fix this problem by setting the cache dir relative to the playbook when running Antora:
 
  $ docker run -u $(id -u) -v $PWD:/antora:Z --rm -t \
-   antora/antora --cache-dir=./.cache --stacktrace site.yml
+   antora/antora --cache-dir=./.cache --stacktrace antora-playbook.yml
 ====
 
 If you want to shell into the container, use the following command:
@@ -112,7 +112,7 @@ By using this image, you can invoke the `antora` command from a script clause in
 [source,yaml]
 ----
   script:
-  - antora site.yml
+  - antora antora-playbook.yml
 ----
 
 [#extend-image]
