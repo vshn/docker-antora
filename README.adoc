@@ -138,6 +138,8 @@ RUN yarn global add asciidoctor-plantuml <1>
 
 Once the build is finished, you can use the image name `local/antora:custom` to run the container.
 
+ $ docker run --rm -t local/antora:custom version
+
 To see a list of your images, run the following command:
 
  $ docker images
