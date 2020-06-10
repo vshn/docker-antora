@@ -128,7 +128,7 @@ You can use this image as a base to create your own image.
 ----
 FROM antora/antora
 
-RUN yarn global add asciidoctor-plantuml <1>
+RUN yarn global add asciidoctor-kroki <1>
 ----
 <1> Adds a custom extension to the base image.
 
