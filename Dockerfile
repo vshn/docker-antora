@@ -9,6 +9,8 @@ RUN apk --no-cache add curl findutils jq \
     && find $(yarn global dir)/node_modules/handlebars/dist/* -maxdepth 0 -not -name cjs -exec rm -rf {} \; \
     && find $(yarn global dir)/node_modules/handlebars/lib/* -maxdepth 0 -not -name index.js -exec rm -rf {} \; \
     && find $(yarn global dir)/node_modules/isomorphic-git/dist/* -maxdepth 0 -not -name for-node -exec rm -rf {} \; \
+    && rm -rf $(yarn global dir)/node_modules/js-yaml/dist \
+    && rm -rf $(yarn global dir)/node_modules/json5/dist \
     && rm -rf $(yarn global dir)/node_modules/moment/min \
     && rm -rf $(yarn global dir)/node_modules/moment/src \
     && rm -rf $(yarn global dir)/node_modules/source-map/dist \
