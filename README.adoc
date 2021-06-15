@@ -1,17 +1,17 @@
 = Docker Image for Antora
-:uri-antora: https://antora.org
-:uri-asciidoctor: https://asciidoctor.org
-:uri-license: https://www.mozilla.org/en-US/MPL/2.0/
-:uri-docker: https://www.docker.com/
-:uri-podman: https://podman.io/
+:url-antora: https://antora.org
+:url-asciidoctor: https://asciidoctor.org
+:url-license: https://www.mozilla.org/en-US/MPL/2.0/
+:url-docker: https://www.docker.com/
+:url-podman: https://podman.io/
 
 This repository hosts the official Docker image for Antora.
 The Docker image is used to run Antora inside a container using the Docker client or podman (or any client that adheres to the OCI standard).
 
 == What is Antora?
 
-{uri-antora}[Antora] is a modular static site generator designed for creating documentation sites from AsciiDoc documents.
-Its site generator pipeline aggregates documents from versioned content repositories and processes them using {uri-asciidoctor}[Asciidoctor].
+{url-antora}[Antora] is a modular static site generator designed for creating documentation sites from AsciiDoc documents.
+Its site generator pipeline aggregates documents from versioned content repositories and processes them using {url-asciidoctor}[Asciidoctor].
 
 == Versioning Policy
 
@@ -40,7 +40,7 @@ You can use this image as a replacement for the `antora` command to execute a pl
 The benefit of using this image is that you don't have to install Antora itself.
 
 To demonstrate how to use this image, we'll be using the https://gitlab.com/antora/demo/demo-site[Antora demo site].
-We'll provide instructions for using the {uri-docker}[Docker client] or {uri-podman}[podman].
+We'll provide instructions for using the {url-docker}[Docker client] or {url-podman}[podman].
 
 Start by cloning the playbook repository for the demo site, then switch to the newly created folder:
 
@@ -158,5 +158,5 @@ Once it's finished, you can use the image name `local/antora` (i.e., `local/anto
 
 Copyright (C) 2018-2020 OpenDevise Inc. and the Antora Project.
 
-Use of this software is granted under the terms of the {uri-license}[Mozilla Public License Version 2.0] (MPL-2.0).
+Use of this software is granted under the terms of the {url-license}[Mozilla Public License Version 2.0] (MPL-2.0).
 See link:LICENSE[] to find the full license text.
