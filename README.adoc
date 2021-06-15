@@ -3,6 +3,7 @@
 :url-asciidoctor: https://asciidoctor.org
 :url-license: https://www.mozilla.org/en-US/MPL/2.0/
 :url-docker: https://www.docker.com/
+:url-docker-hub: https://hub.docker.com/r/antora/antora
 :url-podman: https://podman.io/
 
 This repository hosts the official Docker image for Antora.
@@ -25,7 +26,7 @@ These tags correspond to the tags applied to the packages in the npm repository.
 [#use-image]
 == How to Use this Image
 
-This image is published to Docker Hub.
+This image is published to {url-docker-hub}[Docker Hub].
 The name of the image is `antora/antora`.
 The purpose of the image is to execute the `antora` command inside a container (as configured by the image).
 
