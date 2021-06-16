@@ -8,7 +8,9 @@ RUN apk --no-cache add curl findutils jq \
     && find $(yarn global dir)/node_modules/`[ -d $(yarn global dir)/node_modules/asciidoctor.js ] && echo asciidoctor.js || echo @asciidoctor/core`/dist -mindepth 1 -maxdepth 1 -not -name node -exec rm -rf {} \; \
     && find $(yarn global dir)/node_modules/handlebars/dist -mindepth 1 -maxdepth 1 -not -name cjs -exec rm -rf {} \; \
     && find $(yarn global dir)/node_modules/handlebars/lib -mindepth 1 -maxdepth 1 -not -name index.js -exec rm -rf {} \; \
-    && find $(yarn global dir)/node_modules/isomorphic-git/dist -mindepth 1 -maxdepth 1 -not -name for-node -exec rm -rf {} \; \
+    && find $(yarn global dir)/node_modules/isomorphic-git -mindepth 2 -maxdepth 2 -regex '.+/dist/[^/]+' -not -name for-node -exec rm -rf {} \; \
+    && find $(yarn global dir)/node_modules/isomorphic-git -mindepth 2 -maxdepth 2 -regex '.+/http/[^/]+' -not -name node -exec rm -rf {} \; \
+    && find $(yarn global dir)/node_modules/isomorphic-git -maxdepth 1 -type f -not -name cli.js -not -regex '.+\.\(cjs\|json\|md\)' -exec rm -f {} \; \
     && rm -rf $(yarn global dir)/node_modules/js-yaml/dist \
     && rm -rf $(yarn global dir)/node_modules/json5/dist \
     && rm -rf $(yarn global dir)/node_modules/moment/min \
