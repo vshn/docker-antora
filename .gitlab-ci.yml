@@ -17,7 +17,7 @@ variables:
 build:
   stage: build
   except:
-  - master@antora/docker-antora
+  - main@antora/docker-antora
   script:
   - *get_antora_version
   - *sub_antora_version
@@ -26,7 +26,7 @@ build:
 deploy:
   stage: deploy
   only:
-  - master@antora/docker-antora
+  - main@antora/docker-antora
   script:
   - |
     echo "Antora version requested: ${ANTORA_VERSION:-none}"
