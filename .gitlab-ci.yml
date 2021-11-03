@@ -11,7 +11,7 @@ variables:
 - &sub_antora_version
   sed -i "s/@latest/@$ANTORA_VERSION/g" Dockerfile
 - &sub_node_version |
-  [ ${ANTORA_VERSION%%.*} -lt 3 ]; then sed -i "s/^FROM node:16-/FROM node:10-/" Dockerfile; fi
+  [ ${ANTORA_VERSION%%.*} -lt 3 ] && sed -i "s/^FROM node:16-/FROM node:10-/" Dockerfile
 - &docker_build
   docker build --pull -t "$CI_REGISTRY_IMAGE:$ANTORA_VERSION" .
 - &docker_list_image
