@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM node:16-alpine
 
 ENV NODE_PATH /usr/local/share/.config/yarn/global/node_modules
 

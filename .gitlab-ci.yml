@@ -6,10 +6,12 @@ before_script:
 variables:
   CI_REGISTRY_IMAGE: antora/antora
 .defs:
-- &get_antora_version
+- &set_antora_version
   ANTORA_VERSION=${ANTORA_VERSION:-$(curl -s 'https://gitlab.com/api/v4/projects/4180516/repository/tags?order_by=updated&sort=desc&per_page=1' | jq -rM '.[].name[1:]')}
 - &sub_antora_version
   sed -i "s/@latest/@$ANTORA_VERSION/g" Dockerfile
+- &sub_node_version |
+  [ ${ANTORA_VERSION%%.*} -lt 3 ]; then sed -i "s/^FROM node:16-/FROM node:10-/" Dockerfile; fi
 - &docker_build
   docker build --pull -t "$CI_REGISTRY_IMAGE:$ANTORA_VERSION" .
 - &docker_list_image
@@ -19,8 +21,9 @@ build:
   except:
   - main@antora/docker-antora
   script:
-  - *get_antora_version
+  - *set_antora_version
   - *sub_antora_version
+  - *sub_node_version
   - *docker_build
   - *docker_list_image
 deploy:
@@ -30,8 +33,9 @@ deploy:
   script:
   - |
     echo "Antora version requested: ${ANTORA_VERSION:-none}"
-  - *get_antora_version
+  - *set_antora_version
   - *sub_antora_version
+  - *sub_node_version
   - *docker_build
   - *docker_list_image
   - CI_REGISTRY_IMAGE_VERSION=$(curl -s https://registry.hub.docker.com/v2/repositories/antora/antora/tags/ | jq -rM '.results[].name | select(. == "'$ANTORA_VERSION'")')
