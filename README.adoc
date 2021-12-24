@@ -11,7 +11,7 @@ This repository hosts the official Docker image for Antora.
 The Docker image is used to run Antora inside a container using the Docker client or podman (or any client that adheres to the OCI standard).
 
 ifdef::badges[]
-image:https://shields.io/docker/pulls/antora/antora[pulls,{url-docker-hub}]
+image:https://shields.io/docker/pulls/antora/antora[pulls,link={url-docker-hub}]
 image:https://shields.io/docker/v/antora/antora/latest[latest,link={url-docker-hub}/tags?name=latest]
 image:https://shields.io/docker/v/antora/antora/testing[testing,link={url-docker-hub}/tags?name=testing]
 endif::[]
