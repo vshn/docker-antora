@@ -1,4 +1,5 @@
 = Docker Image for Antora
+:badges:
 :url-antora: https://antora.org
 :url-asciidoctor: https://asciidoctor.org
 :url-license: https://www.mozilla.org/en-US/MPL/2.0/
@@ -8,6 +9,12 @@
 
 This repository hosts the official Docker image for Antora.
 The Docker image is used to run Antora inside a container using the Docker client or podman (or any client that adheres to the OCI standard).
+
+ifdef::badges[]
+image:https://shields.io/docker/pulls/antora/antora[pulls]
+image:https://shields.io/docker/v/antora/antora/latest[latest,link=https://hub.docker.com/r/antora/antora/tags?name=latest]
+image:https://shields.io/docker/v/antora/antora/testing[testing,link=https://hub.docker.com/r/antora/antora/tags?name=testing]
+endif::[]
 
 == What is Antora?
 
