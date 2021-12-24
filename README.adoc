@@ -19,23 +19,24 @@ endif::[]
 == What is Antora?
 
 {url-antora}[Antora] is a modular static site generator designed for creating documentation sites from AsciiDoc documents.
-Its site generator pipeline aggregates documents from versioned content repositories and processes them using {url-asciidoctor}[Asciidoctor].
+Antora's site generator aggregates documents from versioned content repositories, processes them using {url-asciidoctor}[Asciidoctor], and publishes them together as a documentation site.
 
 == Versioning Policy
 
 There's exactly one version of the image for each released version of Antora.
-That includes Antora prereleases (e.g., 2.3.0-beta.1).
+That relationship includes Antora prereleases (e.g., 2.3.0-beta.1).
 
-The greatest stable release is also published under the Docker tag "latest".
-The greatest prerelease is also published under the Docker tag "testing".
+The greatest stable release is published under the Docker tag "latest".
+The greatest prerelease is published under the Docker tag "testing".
 These tags correspond to the tags applied to the packages in the npm repository.
 
 [#use-image]
 == How to Use this Image
 
-This image is published to {url-docker-hub}[Docker Hub].
 The name of the image is `antora/antora`.
+This image is published to {url-docker-hub}[Docker Hub].
 The purpose of the image is to execute the `antora` command inside a container (as configured by the image).
+Currently, this image only provides a linux/amd64 container.
 
 If you want to help improve this image, you should learn how to <<build-image,build and install it locally>>.
 
