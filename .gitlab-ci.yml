@@ -32,7 +32,8 @@ deploy:
   only:
   - main@antora/docker-antora
   script:
-  - echo "Antora version requested: ${ANTORA_VERSION:-none}"
+  - |
+    echo "Antora version requested: ${ANTORA_VERSION:-none}"
   - *set_antora_version
   - *sub_antora_version
   - *sub_node_version
