@@ -32,9 +32,9 @@ deploy:
   only:
   - main@antora/docker-antora
   script:
-  - echo "Antora version requested: ${ANTORA_VERSION:-none}"
+  - echo "Antora version requested:" ${ANTORA_VERSION:-none}
   - *set_antora_version
-  - echo "Antora version resolved: $ANTORA_VERSION"
+  - echo "Antora version resolved:" $ANTORA_VERSION
   - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   - docker pull "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
   - docker tag "$CI_REGISTRY_IMAGE:$ANTORA_VERSION" "$CI_REGISTRY_IMAGE:testing"
