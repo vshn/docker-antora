@@ -1,6 +1,6 @@
-image: docker:19.03
+image: docker:20
 services:
-- docker:19.03-dind
+- docker:20-dind
 before_script:
 - apk --no-cache -q add curl jq
 variables:
@@ -19,8 +19,10 @@ variables:
   docker images "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
 build:
   stage: build
-  except:
-  - main@antora/docker-antora
+  rules:
+  - if: $CI_PROJECT_PATH == 'antora/docker-antora' && $CI_COMMIT_BRANCH == 'main'
+    when: never
+  - when: on_success
   script:
   - *set_antora_version
   - *sub_antora_version
@@ -29,8 +31,8 @@ build:
   - *docker_list_image
 deploy:
   stage: deploy
-  only:
-  - main@antora/docker-antora
+  rules:
+  - if: $CI_PROJECT_PATH == 'antora/docker-antora' && $CI_COMMIT_BRANCH == 'main'
   script:
   - echo "Antora version requested:" ${ANTORA_VERSION:-none}
   - *set_antora_version
