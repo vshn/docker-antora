@@ -35,29 +35,30 @@ deploy:
   - echo "Antora version requested:" ${ANTORA_VERSION:-none}
   - *set_antora_version
   - echo "Antora version resolved:" $ANTORA_VERSION
+  - *sub_antora_version
+  - *sub_node_version
+  - *docker_build
+  - *docker_list_image
+  - |
+    while [ -n $CI_REGISTRY_TAGS_RESOURCE ]; do
+      _tags=$(curl -s $CI_REGISTRY_TAGS_RESOURCE)
+      _published=$(echo $_tags | jq -rM '.results[].name | select(. == "'$ANTORA_VERSION'")')
+      if [ -n $_published ]; then
+        echo "Skipping publishing. $CI_REGISTRY_IMAGE:$ANTORA_VERSION has already been published."
+        exit 0
+      else
+        CI_REGISTRY_TAGS_RESOURCE=$(echo $_tags | jq -rM '.next')
+      fi
+    done
   - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-  - docker pull "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
-  - docker tag "$CI_REGISTRY_IMAGE:$ANTORA_VERSION" "$CI_REGISTRY_IMAGE:testing"
-  - docker push "$CI_REGISTRY_IMAGE:testing"
-  #- *sub_antora_version
-  #- *sub_node_version
-  #- *docker_build
-  #- *docker_list_image
-  #- |
-  #  while [ -n $CI_REGISTRY_TAGS_RESOURCE ]; do
-  #    _tags=$(curl -s $CI_REGISTRY_TAGS_RESOURCE)
-  #    _published=$(echo $_tags | jq -rM '.results[].name | select(. == "'$ANTORA_VERSION'")')
-  #    if [ -n $_published ]; then
-  #      echo "Skipping publishing. $CI_REGISTRY_IMAGE:$ANTORA_VERSION has already been published."
-  #      exit 0
-  #    else
-  #      CI_REGISTRY_TAGS_RESOURCE=$(echo $_tags | jq -rM '.next')
-  #    fi
-  #  done
-  #- echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-  #- echo "Publishing $CI_REGISTRY_IMAGE:$ANTORA_VERSION"
-  #- docker push "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
-  #- if [ -z "${ANTORA_VERSION/*-*}" ]; then CI_REGISTRY_IMAGE_TAG=testing; else CI_REGISTRY_IMAGE_TAG=latest; fi
-  #- echo "Tagging $CI_REGISTRY_IMAGE:$ANTORA_VERSION as $CI_REGISTRY_IMAGE_TAG"
-  #- docker tag "$CI_REGISTRY_IMAGE:$ANTORA_VERSION" "$CI_REGISTRY_IMAGE:$CI_REGISTRY_IMAGE_TAG"
-  #- docker push "$CI_REGISTRY_IMAGE:$CI_REGISTRY_IMAGE_TAG"
+  - echo "Publishing $CI_REGISTRY_IMAGE:$ANTORA_VERSION"
+  - docker push "$CI_REGISTRY_IMAGE:$ANTORA_VERSION"
+  - |
+    if [ -z "${ANTORA_VERSION/*-*}" ]; then
+      CI_REGISTRY_IMAGE_TAG=testing
+    else
+      CI_REGISTRY_IMAGE_TAG=latest
+    fi
+  - echo "Tagging $CI_REGISTRY_IMAGE:$ANTORA_VERSION as $CI_REGISTRY_IMAGE_TAG"
+  - docker tag "$CI_REGISTRY_IMAGE:$ANTORA_VERSION" "$CI_REGISTRY_IMAGE:$CI_REGISTRY_IMAGE_TAG"
+  - docker push "$CI_REGISTRY_IMAGE:$CI_REGISTRY_IMAGE_TAG"
