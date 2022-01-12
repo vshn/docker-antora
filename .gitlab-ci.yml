@@ -44,13 +44,14 @@ deploy:
   - |
     while [ -n "$CI_REGISTRY_TAGS_RESOURCE" ]; do
       _tags=$(curl -s $CI_REGISTRY_TAGS_RESOURCE)
-      echo checking batch...
       _published=$(echo $_tags | jq -rM '.results[].name | select(. == "'$ANTORA_VERSION'")')
       if [ "$_published" == "$ANTORA_VERSION" ]; then
         echo "Skipping publishing. $CI_REGISTRY_IMAGE:$ANTORA_VERSION has already been published."
         exit 0
       else
         CI_REGISTRY_TAGS_RESOURCE=$(echo $_tags | jq -rM '.next')
+        echo $?
+        echo "|$CI_REGISTRY_TAGS_RESOURCE|"
       fi
     done
   - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
