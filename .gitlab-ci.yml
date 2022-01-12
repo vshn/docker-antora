@@ -42,10 +42,10 @@ deploy:
   - *docker_build
   - *docker_list_image
   - |
-    while [ -n $CI_REGISTRY_TAGS_RESOURCE ]; do
+    while [ -n "$CI_REGISTRY_TAGS_RESOURCE" ]; do
       _tags=$(curl -s $CI_REGISTRY_TAGS_RESOURCE)
       _published=$(echo $_tags | jq -rM '.results[].name | select(. == "'$ANTORA_VERSION'")')
-      if [ -n $_published ]; then
+      if [ "$_published" == "$ANTORA_VERSION" ]; then
         echo "Skipping publishing. $CI_REGISTRY_IMAGE:$ANTORA_VERSION has already been published."
         exit 0
       else
