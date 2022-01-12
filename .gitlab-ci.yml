@@ -44,6 +44,7 @@ deploy:
   - |
     while [ -n "$CI_REGISTRY_TAGS_RESOURCE" ]; do
       _tags=$(curl -s $CI_REGISTRY_TAGS_RESOURCE)
+      echo checking batch...
       _published=$(echo $_tags | jq -rM '.results[].name | select(. == "'$ANTORA_VERSION'")')
       if [ "$_published" == "$ANTORA_VERSION" ]; then
         echo "Skipping publishing. $CI_REGISTRY_IMAGE:$ANTORA_VERSION has already been published."
