@@ -8,7 +8,7 @@
 :url-podman: https://podman.io/
 
 This repository hosts the official Docker image for Antora.
-The Docker image is used to run Antora inside a container using the Docker client or podman (or any client that adheres to the OCI standard).
+The Docker image is used to run Antora inside a container using the Docker client or Podman (or any client that adheres to the OCI standard).
 
 ifdef::badges[]
 image:https://shields.io/docker/pulls/antora/antora[pulls,link={url-docker-hub}]
@@ -49,7 +49,7 @@ You can use this image as a replacement for the `antora` command to execute a pl
 The benefit of using this image is that you don't have to install Antora itself.
 
 To demonstrate how to use this image, we'll be using the https://gitlab.com/antora/demo/demo-site[Antora demo site].
-We'll provide instructions for using the {url-docker}[Docker client] or {url-podman}[podman].
+We'll provide instructions for using the {url-docker}[Docker client] or {url-podman}[Podman].
 
 Start by cloning the playbook repository for the demo site, then switch to the newly created folder:
 
@@ -66,7 +66,7 @@ Alternately, you can execute the `podman run` command:
 
  $ podman run -v $PWD:/antora --rm -t antora/antora --stacktrace antora-playbook.yml
 
-The advantage of podman is that it is more secure.
+The advantage of Podman is that it is more secure.
 It runs in user space and does not rely on a daemon.
 
 If you're running a Linux distribution that has SELinux enabled, like Fedora, you'll need to add the `:Z` (or `:z`) modifier to the volume mount.
@@ -76,7 +76,7 @@ Here's the command you'll use:
 
  $ docker run -u $(id -u) -v $PWD:/antora:Z --rm -t antora/antora --stacktrace antora-playbook.yml
 
-When using podman, the `-u` flag is not required since the container is already run in user space.
+When using Podman, the `-u` flag is not required since the container is already run in user space.
 
  $ podman run -v $PWD:/antora:Z --rm -t antora/antora --stacktrace antora-playbook.yml
  
