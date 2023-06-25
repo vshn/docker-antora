@@ -1,5 +1,7 @@
 FROM node:16-alpine
 
+LABEL org.opencontainers.image.source="https://gitlab.com/antora/docker-antora"
+
 ENV NODE_PATH /usr/local/share/.config/yarn/global/node_modules
 
 RUN apk --no-cache add curl findutils jq \
