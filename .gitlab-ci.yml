@@ -3,7 +3,7 @@ stages:
   - build
 
 buildx:
-  image: docker:stable
+  image: docker:stable-git
   stage: buildx
   variables:
     GIT_STRATEGY: none
