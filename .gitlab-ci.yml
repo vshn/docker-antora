@@ -8,9 +8,8 @@ stages:
     - docker:dind
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker buildx create --name multiarch-builder --driver docker-container
-    - docker buildx use multiarch-builder
-    - docker buildx inspect --bootstrap
+    - docker buildx create
+    - docker buildx use --default
 
 docker-build:
   extends: .base
