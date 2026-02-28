@@ -1,4 +1,4 @@
-= Docker Image for Antora
+= Docker Image for Antora (DEPRECATED)
 :badges:
 :url-antora: https://antora.org
 :url-asciidoctor: https://asciidoctor.org
@@ -6,6 +6,8 @@
 :url-docker: https://www.docker.com/
 :url-docker-hub: https://hub.docker.com/r/antora/antora
 :url-podman: https://podman.io/
+
+WARNING: This repository is deprecated. The functionality has been merged into https://github.com/vshn/antora[vshn/antora], which now builds directly from `node:alpine` and includes all VSHN-specific tools. Use `ghcr.io/vshn/antora` instead of `ghcr.io/vshn/docker-antora`.
 
 This repository hosts the official Docker image for Antora.
 The Docker image is used to run Antora inside a container using the Docker client or Podman (or any client that adheres to the OCI standard).
